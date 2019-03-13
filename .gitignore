@@ -1,0 +1,13 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/.vs
+/App1/bin
+/App1/obj
+/App1/App1/bin
+/App1/App1/obj
+/App1/App1.Android/bin
+/App1/App1.Android/obj
+/App1/App1.IOS/bin
+/App1/App1.IOS/obj

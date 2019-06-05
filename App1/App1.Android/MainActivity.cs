@@ -21,7 +21,8 @@ namespace App1.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
 
-        static readonly string cuid = "fkjaxF2EKjiDTigVWFmaCPbk";//用户唯一识别码，官方建议使用MAC地址
+        static readonly string apikey = "fkjaxF2EKjiDTigVWFmaCPbk";//用户唯一识别码，官方建议使用MAC地址
+        static readonly string secretkey = "gmSiC7pHX7WMVdGD6Ux7YWVQDhNraYDK";//用户唯一识别码，官方建议使用MAC地址
         int count = 1;
         static Android.Webkit.WebView webview;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -84,7 +85,8 @@ namespace App1.Droid
                 //使用WebView控件打开指定网页  
                 Android.Webkit.WebView webview2 = FindViewById<Android.Webkit.WebView>(Resource.Id.webView1);
                 webview = webview2;
-                PalyAudio();
+                var speechtext = FindViewById<EditText>(Resource.Id.editText2);
+                PalyAudio(speechtext.Text);
             };
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -213,19 +215,19 @@ namespace App1.Droid
             //官网地址http://ai.baidu.com/tech/speech/tts
             //官方文档地址http://ai.baidu.com/docs#/TTS-API/top
             //在Url里的client_id后输入你的APIKey，client_secret后输入你的SecretKey，我下面的两个key已经被改过了，直接请求会被拒绝
-            string TokenUrl = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + cuid + "&client_secret=gmSiC7pHX7WMVdGD6Ux7YWVQDhNraYDK&";
+            string TokenUrl = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + apikey + "&client_secret=" + secretkey + "&";
             Encoding ec = Encoding.UTF8;//官方要求以UTF-8请求
             string tokenJson = DoPost(TokenUrl, "", ec);//请求出Json字符串
             BdVideoTokenModel b = JsonConvert.DeserializeObject<BdVideoTokenModel>(tokenJson);//解析出Token
             return b.access_token;
         }
 
-        public static void PalyAudio()
+        public static void PalyAudio(string text)
         {
             string url = "";//完整url路径
             string url1 = "http://tsn.baidu.com/text2audio?tex=";//调用路径
             //必须的几个参数
-            string text = DateTime.Now.ToString("yyyy年MM月dd日 HH:mm:ss");//本人懒省事，直接让他报现在的时间
+            //string text = DateTime.Now.ToString("yyyy年MM月dd日 HH:mm:ss");//本人懒省事，直接让他报现在的时间
             string tok = GetToken();//Token令牌,有效期为30天，可以缓存在本地
             if (text.Length >= 2048)//官方要求长度为小于2048位
             {
@@ -257,7 +259,7 @@ namespace App1.Droid
 
 
             //其他参数我就不声明了，直接写在url里了
-            url = url1 + text + "&lan=zh&cuid=" + cuid + "&ctp=1&tok=" + tok + "&vol=15&per=4&aue=3&spd=4";
+            url = url1 + text + "&lan=zh&cuid=" + apikey + "&ctp=1&tok=" + tok + "&vol=15&per=4&aue=3&spd=4";
             //DependencyService.Get<IAudio>().PlayAudioFile(url);
             //System.Diagnostics.Process.Start(url);//这里我直接让浏览器读了
 
